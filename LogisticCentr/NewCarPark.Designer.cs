@@ -58,7 +58,7 @@ namespace LogisticCentr
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(45, 41);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(596, 288);
+            this.dataGridView1.Size = new System.Drawing.Size(685, 288);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
@@ -94,7 +94,7 @@ namespace LogisticCentr
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(663, 41);
+            this.label1.Location = new System.Drawing.Point(756, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 4;
@@ -102,14 +102,14 @@ namespace LogisticCentr
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(738, 41);
+            this.textBox1.Location = new System.Drawing.Point(831, 41);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(327, 20);
             this.textBox1.TabIndex = 5;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(673, 255);
+            this.button4.Location = new System.Drawing.Point(766, 255);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 6;
@@ -129,7 +129,7 @@ namespace LogisticCentr
             // 
             // textBoxIdCar
             // 
-            this.textBoxIdCar.Location = new System.Drawing.Point(738, 107);
+            this.textBoxIdCar.Location = new System.Drawing.Point(831, 107);
             this.textBoxIdCar.Name = "textBoxIdCar";
             this.textBoxIdCar.Size = new System.Drawing.Size(100, 20);
             this.textBoxIdCar.TabIndex = 9;
@@ -137,7 +137,7 @@ namespace LogisticCentr
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(663, 105);
+            this.label2.Location = new System.Drawing.Point(756, 105);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 8;
@@ -145,7 +145,7 @@ namespace LogisticCentr
             // 
             // textBoxBrand
             // 
-            this.textBoxBrand.Location = new System.Drawing.Point(965, 102);
+            this.textBoxBrand.Location = new System.Drawing.Point(1058, 102);
             this.textBoxBrand.Name = "textBoxBrand";
             this.textBoxBrand.Size = new System.Drawing.Size(100, 20);
             this.textBoxBrand.TabIndex = 11;
@@ -153,7 +153,7 @@ namespace LogisticCentr
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(890, 107);
+            this.label3.Location = new System.Drawing.Point(983, 107);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 10;
@@ -161,7 +161,7 @@ namespace LogisticCentr
             // 
             // textBoxYear
             // 
-            this.textBoxYear.Location = new System.Drawing.Point(738, 143);
+            this.textBoxYear.Location = new System.Drawing.Point(831, 143);
             this.textBoxYear.Name = "textBoxYear";
             this.textBoxYear.Size = new System.Drawing.Size(100, 20);
             this.textBoxYear.TabIndex = 13;
@@ -169,7 +169,7 @@ namespace LogisticCentr
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(663, 148);
+            this.label4.Location = new System.Drawing.Point(756, 148);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 12;
@@ -177,7 +177,7 @@ namespace LogisticCentr
             // 
             // textBoxStateNumber
             // 
-            this.textBoxStateNumber.Location = new System.Drawing.Point(964, 140);
+            this.textBoxStateNumber.Location = new System.Drawing.Point(1057, 140);
             this.textBoxStateNumber.Name = "textBoxStateNumber";
             this.textBoxStateNumber.Size = new System.Drawing.Size(100, 20);
             this.textBoxStateNumber.TabIndex = 15;
@@ -185,7 +185,7 @@ namespace LogisticCentr
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(894, 143);
+            this.label5.Location = new System.Drawing.Point(987, 143);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 13);
             this.label5.TabIndex = 14;
@@ -193,7 +193,7 @@ namespace LogisticCentr
             // 
             // textBoxTypebody
             // 
-            this.textBoxTypebody.Location = new System.Drawing.Point(738, 192);
+            this.textBoxTypebody.Location = new System.Drawing.Point(831, 192);
             this.textBoxTypebody.Name = "textBoxTypebody";
             this.textBoxTypebody.Size = new System.Drawing.Size(327, 20);
             this.textBoxTypebody.TabIndex = 17;
@@ -201,7 +201,7 @@ namespace LogisticCentr
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(663, 195);
+            this.label6.Location = new System.Drawing.Point(756, 195);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 16;
@@ -209,7 +209,7 @@ namespace LogisticCentr
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(781, 255);
+            this.button6.Location = new System.Drawing.Point(874, 255);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 18;
@@ -219,7 +219,7 @@ namespace LogisticCentr
             // 
             // textBoxtonnage
             // 
-            this.textBoxtonnage.Location = new System.Drawing.Point(870, 73);
+            this.textBoxtonnage.Location = new System.Drawing.Point(963, 73);
             this.textBoxtonnage.Name = "textBoxtonnage";
             this.textBoxtonnage.Size = new System.Drawing.Size(100, 20);
             this.textBoxtonnage.TabIndex = 20;
@@ -227,7 +227,7 @@ namespace LogisticCentr
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(752, 76);
+            this.label7.Location = new System.Drawing.Point(845, 76);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(104, 13);
             this.label7.TabIndex = 19;
@@ -237,7 +237,7 @@ namespace LogisticCentr
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1130, 499);
+            this.ClientSize = new System.Drawing.Size(1189, 499);
             this.Controls.Add(this.textBoxtonnage);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.button6);

@@ -62,12 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CarPark.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CarPark.Designer.cs">
-      <DependentUpon>CarPark.cs</DependentUpon>
-    </Compile>
     <Compile Include="Drivers.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,11 +70,6 @@
     </Compile>
     <Compile Include="Helpers\DateTimePickerForDataGridView.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
-    <Compile Include="LogicCentrDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LogicCentrDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,9 +84,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="CarPark.resx">
-      <DependentUpon>CarPark.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Drivers.resx">
       <DependentUpon>Drivers.cs</DependentUpon>
     </EmbeddedResource>
@@ -116,17 +102,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="LogicCentrDataSet.xsc">
-      <DependentUpon>LogicCentrDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="LogicCentrDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>LogicCentrDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="LogicCentrDataSet.xss">
-      <DependentUpon>LogicCentrDataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

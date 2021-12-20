@@ -23,7 +23,6 @@ namespace LogisticCentr
 
         public NewCarPark()
         {
-            
             InitializeComponent();
 
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -36,19 +35,24 @@ namespace LogisticCentr
                 adapter.RowUpdated += new SqlRowUpdatedEventHandler(onUpdate);
                 //adapter.RowUpdating += new SqlRowUpdatingEventHandler(onUpdating);
                 //adapter.FillError += new FillErrorEventHandler(tt);
-
                 
                 ds = new DataSet();
                 adapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
-                dataGridView1.Columns["id_car"].ReadOnly = true;
+                SetSettingsDataGrid();
             }
         }
 
-        //private static void tt(object sender, FillErrorEventArgs e)
-        //{
-
-        //}
+        private void SetSettingsDataGrid()
+        {
+            dataGridView1.Columns["id_car"].ReadOnly = true;
+            dataGridView1.Columns["id_car"].HeaderText = "Код машины";
+            dataGridView1.Columns["brand"].HeaderText = "Название марки";
+            dataGridView1.Columns["year_issue"].HeaderText = "Год выпуска";
+            dataGridView1.Columns["tonnage"].HeaderText = "Вместимость(тонн)";
+            dataGridView1.Columns["state_number"].HeaderText = "Гос. номер";
+            dataGridView1.Columns["body_type"].HeaderText = "Тип кузова";
+        }
 
         private void NewCarPark_Load(object sender, EventArgs e)
         {

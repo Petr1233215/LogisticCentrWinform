@@ -48,7 +48,7 @@ namespace LogisticCentr
             }
 
 
-            CarPark carPark = new CarPark();
+            NewCarPark carPark = new NewCarPark();
             carPark.Show();
             this.Hide();
         }
