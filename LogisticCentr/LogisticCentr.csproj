@@ -68,7 +68,6 @@
     <Compile Include="Drivers.Designer.cs">
       <DependentUpon>Drivers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\DateTimePickerForDataGridView.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
