@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,7 +17,25 @@ namespace LogisticCentr.Helpers
         /// <returns></returns>
         public static bool IsDigitOrBackspace(KeyPressEventArgs e)
         {
-            return char.IsDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back;
+            return char.IsDigit(e.KeyChar) || IsBackSpace(e);
+        }
+
+        public static bool IsBackSpace(KeyPressEventArgs e)
+        {
+            return e.KeyChar == (char)Keys.Back;
+        }
+
+        public static bool IsMoneyTypeOrBackspace(KeyPressEventArgs e, string textVal)
+        {
+            string pattern = @"^[0-9]{1,15}([,][0-9]{1,4})?$";
+
+            string val = e.KeyChar.ToString();
+
+            //Для того чтобы валидация прошла корректно, если пользователь вводит ,
+            if (val == ",")
+                val += 0;
+
+            return IsBackSpace(e) || Regex.IsMatch(textVal + val, pattern);
         }
 
         /// <summary>
@@ -26,9 +46,42 @@ namespace LogisticCentr.Helpers
         {
             if (!IsDigitOrBackspace(e))
             {
-                MessageBox.Show("Вы не можете вводить сюда ничего кроме цифр");
+                MessageBox.Show("Вы не можете вводить ничего кроме цифр");
                 e.Handled = true;
             }
+        }
+
+        /// <summary>
+        /// Метод обрабатывает, действие если клавиша не цифра
+        /// </summary>
+        /// <param name="e"></param>
+        public static void HandleTypeMoney(KeyPressEventArgs e, string textVal)
+        {
+            if (!IsMoneyTypeOrBackspace(e, textVal))
+            {
+                MessageBox.Show("Вы можете сюда вводить только денежный тип, например: 555,3443 ;  999993,954; 98999");
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Валидация значений строки на null
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="columnCollection"></param>
+        /// <param name="arrayNameColumnNotCanNull">список названий столбцов, которые не могут быть null</param>
+        /// <returns></returns>
+        public static string CheckValuesItemArrayForNull(DataRow row, DataGridViewColumnCollection columnCollection, string[] arrayNameColumnNotCanNull)
+        {
+            string err = "";
+
+            foreach (var name in arrayNameColumnNotCanNull)
+            {
+                if (row[name] == DBNull.Value)
+                    err += $"Значение в столбце: {columnCollection[name].HeaderText} не может быть пустым.\n";
+            }
+
+            return err;
         }
     }
 }
