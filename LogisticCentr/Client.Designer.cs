@@ -87,7 +87,6 @@ namespace LogisticCentr
             this.dataGridView1.Size = new System.Drawing.Size(706, 288);
             this.dataGridView1.TabIndex = 13;
             this.dataGridView1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
-            this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridView1_KeyPress);
             // 
             // button4
             // 

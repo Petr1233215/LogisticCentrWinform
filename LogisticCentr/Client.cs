@@ -26,6 +26,7 @@ namespace LogisticCentr
                 connection.Open();
                 adapter = new SqlDataAdapter(sqlMain, connection);
                 adapter.RowUpdated += new SqlRowUpdatedEventHandler(onUpdate);
+
                 ds = new DataSet();
                 adapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
@@ -34,6 +35,9 @@ namespace LogisticCentr
             }
         }
 
+        /// <summary>
+        /// Преднастройка таблицы
+        /// </summary>
         private void SetSettingsDataGrid()
         {
             dataGridView1.Columns["id_client"].ReadOnly = true;
@@ -130,14 +134,12 @@ namespace LogisticCentr
             }
         }
 
+        /// <summary>
+        /// обновить данные из БД
+        /// </summary>
         private void button4_Click(object sender, EventArgs e)
         {
             SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
-        }
-
-        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            
         }
 
         private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -146,6 +148,11 @@ namespace LogisticCentr
             dataGridView1.EditingControl.KeyPress += EditingControl_KeyPress;
         }
 
+        /// <summary>
+        /// обработчик нажатия клавиж при вводе в ячейках таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditingControl_KeyPress(object sender, KeyPressEventArgs e)
         {
             var nameColumn = this.dataGridView1.CurrentCell.OwningColumn.Name;
@@ -153,7 +160,6 @@ namespace LogisticCentr
             {
                 ValidateHelper.HandleCheckDigit(e);
             }
-
         }
     }
 }
