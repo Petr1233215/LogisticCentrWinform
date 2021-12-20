@@ -35,12 +35,13 @@ namespace LogisticCentr
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button4 = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(24, 390);
+            this.button5.Location = new System.Drawing.Point(24, 432);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 17;
@@ -50,7 +51,7 @@ namespace LogisticCentr
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(655, 346);
+            this.button3.Location = new System.Drawing.Point(655, 388);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -60,7 +61,7 @@ namespace LogisticCentr
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(357, 346);
+            this.button2.Location = new System.Drawing.Point(357, 388);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 15;
@@ -70,7 +71,7 @@ namespace LogisticCentr
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(24, 346);
+            this.button1.Location = new System.Drawing.Point(24, 388);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 14;
@@ -81,7 +82,7 @@ namespace LogisticCentr
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(24, 26);
+            this.dataGridView1.Location = new System.Drawing.Point(24, 68);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(706, 288);
             this.dataGridView1.TabIndex = 13;
@@ -90,7 +91,7 @@ namespace LogisticCentr
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(655, 390);
+            this.button4.Location = new System.Drawing.Point(655, 432);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 51);
             this.button4.TabIndex = 18;
@@ -98,11 +99,22 @@ namespace LogisticCentr
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(581, 11);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(140, 33);
+            this.label8.TabIndex = 23;
+            this.label8.Text = "Клиенты";
+            // 
             // Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 499);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);
@@ -113,6 +125,7 @@ namespace LogisticCentr
             this.Text = "Clients";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -124,5 +137,6 @@ namespace LogisticCentr
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label8;
     }
 }
