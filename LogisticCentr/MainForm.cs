@@ -55,8 +55,41 @@ namespace LogisticCentr
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Drivers drivers = new Drivers();
+            Driver drivers = new Driver();
             drivers.Show();
+            this.Hide();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var client = new Client();
+            client.Show();
+            this.Hide();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var logist = new Logistic();
+            logist.Show();
+            this.Hide();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var route = new Route();
+            route.Show();
+            this.Hide();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var trans = new Transportation();
+            trans.Show();
             this.Hide();
         }
     }

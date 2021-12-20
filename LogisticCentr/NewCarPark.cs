@@ -132,7 +132,8 @@ namespace LogisticCentr
                             $"\n{e.Errors.Message}");
                         return;
                     default:
-                        MessageBox.Show(e.Errors.Message);
+                        MessageBox.Show($"Ошибка в столбце: {nameColumn}" +
+                            $"\n" + e.Errors.Message);
                         return;
                 }
             }
@@ -208,6 +209,11 @@ namespace LogisticCentr
              return $"{SqlHelper.GetStringLikePattern("brand", textBox1.Text)} or {SqlHelper.GetStringLikePattern("year_issue", textBox1.Text)} " +
                 $"or {SqlHelper.GetStringLikePattern("tonnage", textBox1.Text)} or {SqlHelper.GetStringLikePattern("state_number", textBox1.Text)} " +
                 $"or {SqlHelper.GetStringLikePattern("body_type", textBox1.Text)} or {SqlHelper.GetStringLikePattern("id_car", textBox1.Text)}";
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
         }
     }
 }

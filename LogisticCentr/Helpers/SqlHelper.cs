@@ -40,7 +40,7 @@ namespace LogisticCentr.Helpers
         /// </summary>
         public static void UpdateSelectViewData(SqlDataAdapter adapter, DataSet ds, string sqlQuery)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connectionString = GetCon();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -50,6 +50,15 @@ namespace LogisticCentr.Helpers
                 ds.Clear();
                 adapter.Fill(ds);
             }
+        }
+
+        /// <summary>
+        /// Получение строки подключения к БД
+        /// </summary>
+        /// <returns></returns>
+        public static string GetCon()
+        {
+            return ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
     }
 }

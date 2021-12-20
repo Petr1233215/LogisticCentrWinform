@@ -50,6 +50,7 @@ namespace LogisticCentr
             this.button6 = new System.Windows.Forms.Button();
             this.textBoxtonnage = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -233,11 +234,22 @@ namespace LogisticCentr
             this.label7.TabIndex = 19;
             this.label7.Text = "Грузоподъемность";
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(566, 410);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 52);
+            this.button7.TabIndex = 21;
+            this.button7.Text = "Обновить данные в таблице";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // NewCarPark
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 499);
+            this.Controls.Add(this.button7);
             this.Controls.Add(this.textBoxtonnage);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.button6);
@@ -291,5 +303,6 @@ namespace LogisticCentr
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox textBoxtonnage;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button7;
     }
 }

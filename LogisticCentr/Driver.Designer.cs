@@ -1,7 +1,7 @@
 ﻿
 namespace LogisticCentr
 {
-    partial class Drivers
+    partial class Driver
     {
         /// <summary>
         /// Required designer variable.
@@ -34,6 +34,7 @@ namespace LogisticCentr
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,17 +86,28 @@ namespace LogisticCentr
             this.dataGridView1.Size = new System.Drawing.Size(706, 288);
             this.dataGridView1.TabIndex = 8;
             // 
-            // Drivers
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(657, 393);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 51);
+            this.button4.TabIndex = 19;
+            this.button4.Text = "Обновить данные в таблице";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // Driver
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1130, 499);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "Drivers";
+            this.Name = "Driver";
             this.Text = "Drivers";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -109,5 +121,6 @@ namespace LogisticCentr
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button button4;
     }
 }

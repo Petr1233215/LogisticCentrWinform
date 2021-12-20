@@ -1,27 +1,20 @@
 ﻿using LogisticCentr.Helpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LogisticCentr
 {
-    public partial class Drivers : Form
+    public partial class Client : Form
     {
         DataSet ds;
         SqlDataAdapter adapter;
         SqlCommandBuilder commandBuilder;
-        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        string sqlMain = "SELECT * FROM drivers";
+        string connectionString = SqlHelper.GetCon();
+        string sqlMain = "SELECT * FROM clients";
 
-        public Drivers()
+        public Client()
         {
             InitializeComponent();
 
@@ -43,28 +36,13 @@ namespace LogisticCentr
 
         private void SetSettingsDataGrid()
         {
-            dataGridView1.Columns["id_driver"].ReadOnly = true;
-            dataGridView1.Columns["birth_date"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss";
-            dataGridView1.Columns["person_hired"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss";
+            dataGridView1.Columns["id_client"].ReadOnly = true;
 
-            dataGridView1.Columns["id_driver"].HeaderText = "Код водителя";
-            dataGridView1.Columns["first_name"].HeaderText = "Имя";
-            dataGridView1.Columns["second_name"].HeaderText = "Фамилия";
-            dataGridView1.Columns["last_name"].HeaderText = "Отчество";
-            dataGridView1.Columns["birth_date"].HeaderText = "Дата рождения";
-            dataGridView1.Columns["person_hired"].HeaderText = "Дата приема на работу";
-        }
-
-        /// <summary>
-        /// Назад
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button5_Click(object sender, EventArgs e)
-        {
-            MainForm mf = new MainForm();
-            mf.Show();
-            this.Close();
+            dataGridView1.Columns["id_client"].HeaderText = "Код клиента";
+            dataGridView1.Columns["name_client"].HeaderText = "Название клиента(организации)";
+            dataGridView1.Columns["contact_person"].HeaderText = "Контактное лицо";
+            dataGridView1.Columns["phone"].HeaderText = "Телефон";
+            dataGridView1.Columns["email"].HeaderText = "Эл. почта";
         }
 
         /// <summary>
@@ -87,6 +65,19 @@ namespace LogisticCentr
             }
         }
 
+
+        /// <summary>
+        /// Назад
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var mainForm = new MainForm();
+            mainForm.Show();
+            this.Close();
+        }
+
         /// <summary>
         /// кнопка добавления
         /// </summary>
@@ -96,6 +87,11 @@ namespace LogisticCentr
             ds.Tables[0].Rows.Add(row);
         }
 
+        /// <summary>
+        /// Кнопка сохранения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -103,15 +99,14 @@ namespace LogisticCentr
                 connection.Open();
                 adapter.SelectCommand = new SqlCommand(sqlMain, connection);
                 commandBuilder = new SqlCommandBuilder(adapter);
-                adapter.InsertCommand = new SqlCommand("sp_CreateDriver", connection);
+                adapter.InsertCommand = new SqlCommand("sp_CreateClient", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@first_name", SqlDbType.NVarChar, 255, "first_name"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@second_name", SqlDbType.NVarChar, 255, "second_name"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@last_name", SqlDbType.NVarChar, 255, "last_name"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@birth_date", SqlDbType.DateTime, 0, "birth_date"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@person_hired", SqlDbType.DateTime, 0, "person_hired"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@name_client", SqlDbType.NVarChar, 255, "name_client"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@contact_person", SqlDbType.NVarChar, 255, "contact_person"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@phone", SqlDbType.NVarChar, 50, "phone"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar, 255, "email"));
 
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@id_driver", SqlDbType.Int, 0, "id_driver");
+                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@id_client", SqlDbType.Int, 0, "id_client");
                 parameter.Direction = ParameterDirection.Output;
 
                 try
@@ -133,6 +128,32 @@ namespace LogisticCentr
             {
                 dataGridView1.Rows.Remove(row);
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
+        }
+
+        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            dataGridView1.EditingControl.KeyPress -= EditingControl_KeyPress;
+            dataGridView1.EditingControl.KeyPress += EditingControl_KeyPress;
+        }
+
+        private void EditingControl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var nameColumn = this.dataGridView1.CurrentCell.OwningColumn.Name;
+            if(nameColumn == "phone")
+            {
+                ValidateHelper.HandleCheckDigit(e);
+            }
+
         }
     }
 }
