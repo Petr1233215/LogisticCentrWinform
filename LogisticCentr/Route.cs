@@ -60,12 +60,10 @@ namespace LogisticCentr
             {
                 string err = ValidateHelper.CheckValuesItemArrayForNull(e.Row, dataGridView1.Columns, new string[] { "distance", "name_route", "price" });
 
-
                 if (string.IsNullOrEmpty(err))
                     err = e.Errors.Message;
                     
                 MessageBox.Show(err);
-
             }
         }
 
