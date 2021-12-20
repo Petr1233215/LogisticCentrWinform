@@ -68,6 +68,13 @@
     <Compile Include="CarPark.Designer.cs">
       <DependentUpon>CarPark.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drivers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drivers.Designer.cs">
+      <DependentUpon>Drivers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\DateTimePickerForDataGridView.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="LogicCentrDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -90,6 +97,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CarPark.resx">
       <DependentUpon>CarPark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Drivers.resx">
+      <DependentUpon>Drivers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

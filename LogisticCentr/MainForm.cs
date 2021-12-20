@@ -52,5 +52,12 @@ namespace LogisticCentr
             carPark.Show();
             this.Hide();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Drivers drivers = new Drivers();
+            drivers.Show();
+            this.Hide();
+        }
     }
 }

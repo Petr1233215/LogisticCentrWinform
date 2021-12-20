@@ -16,7 +16,7 @@ namespace LogisticCentr
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new NewCarPark());
+            Application.Run(new MainForm());
         }
     }
 }

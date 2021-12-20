@@ -42,9 +42,6 @@ namespace LogisticCentr
                 adapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
                 dataGridView1.Columns["id_car"].ReadOnly = true;
-
-
-                
             }
         }
 
@@ -76,7 +73,6 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
-            // удаляем выделенные строки из dataGridView1
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 dataGridView1.Rows.Remove(row);
@@ -112,7 +108,6 @@ namespace LogisticCentr
                     adapter.Update(ds);
                 }
                 catch (Exception ex){}
-                
             }
         }
 
@@ -123,7 +118,6 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void onUpdate(object sender, SqlRowUpdatedEventArgs e)
         {
-            Console.WriteLine(e.Row[0]);
             if (e.Errors != null)
             {
                 var nameColumn = dataGridView1.CurrentCell.OwningColumn.HeaderText;
