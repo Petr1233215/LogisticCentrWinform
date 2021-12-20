@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -17,11 +18,12 @@ namespace LogisticCentr
         DataSet ds;
         SqlDataAdapter adapter;
         SqlCommandBuilder commandBuilder;
-        string connectionString = @"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=LogicCentr; Integrated Security=True;";
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         string sqlMain = "SELECT * FROM cars_park";
 
         public NewCarPark()
         {
+            
             InitializeComponent();
 
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -31,13 +33,25 @@ namespace LogisticCentr
             {
                 connection.Open();
                 adapter = new SqlDataAdapter(sqlMain, connection);
+                adapter.RowUpdated += new SqlRowUpdatedEventHandler(onUpdate);
+                //adapter.RowUpdating += new SqlRowUpdatingEventHandler(onUpdating);
+                //adapter.FillError += new FillErrorEventHandler(tt);
 
+                
                 ds = new DataSet();
                 adapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
                 dataGridView1.Columns["id_car"].ReadOnly = true;
+
+
+                
             }
         }
+
+        //private static void tt(object sender, FillErrorEventArgs e)
+        //{
+
+        //}
 
         private void NewCarPark_Load(object sender, EventArgs e)
         {
@@ -79,7 +93,8 @@ namespace LogisticCentr
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                adapter = new SqlDataAdapter(sqlMain, connection);
+                //adapter = new SqlDataAdapter(sqlMain, connection);
+                adapter.SelectCommand = new SqlCommand(sqlMain, connection);
                 commandBuilder = new SqlCommandBuilder(adapter);
                 adapter.InsertCommand = new SqlCommand("sp_CreateCarPark", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
@@ -92,9 +107,47 @@ namespace LogisticCentr
                 SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@id_car", SqlDbType.Int, 0, "id_car");
                 parameter.Direction = ParameterDirection.Output;
 
-                adapter.Update(ds);
+                try
+                {
+                    adapter.Update(ds);
+                }
+                catch (Exception ex){}
+                
             }
         }
+
+        /// <summary>
+        /// Обработчик обновления данных в DATASET'e используется для отлова ошибок
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onUpdate(object sender, SqlRowUpdatedEventArgs e)
+        {
+            Console.WriteLine(e.Row[0]);
+            if (e.Errors != null)
+            {
+                var nameColumn = dataGridView1.CurrentCell.OwningColumn.HeaderText;
+                switch (nameColumn)
+                {
+                    case "year_issue":
+                        MessageBox.Show($"Значение не должно быть пустым. Значение должно быть целочисленным и не должно превышать {int.MaxValue}" +
+                            $"\n{e.Errors.Message}");
+                        return;
+                    default:
+                        MessageBox.Show(e.Errors.Message);
+                        return;
+                }
+            }
+        }
+
+        //private void onUpdating(object sender, SqlRowUpdatingEventArgs e)
+        //{
+        //    if (e.Errors != null)
+        //    {
+        //        MessageBox.Show(e.Errors.Message);
+        //        MessageBox.Show("At row with key=" + e.Row["somecolumntoidentifytherow"]);
+        //    }
+        //}
 
         /// <summary>
         /// Filtr
@@ -103,18 +156,10 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            //string sqlStr = $"SELECT * FROM cars_park Where id_car like {SqlHelper.GetStringLikePattern(textBox1.Text)} or brand like {SqlHelper.GetStringLikePattern(textBox1.Text)}";
+            //ToDo сделать валидацию полей фильтров
 
             string sql = $"SELECT * FROM cars_park Where {GetFilterFromTextBox()} and ({GetSearchFilterTextBox()})";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                adapter.SelectCommand = new SqlCommand(sql, connection);
-
-                ds.Clear();
-                adapter.Fill(ds);
-            }
+            SqlHelper.UpdateSelectViewData(adapter, ds, sql);
         }
 
 
@@ -127,7 +172,7 @@ namespace LogisticCentr
         {
             MainForm main = new MainForm();
             main.Show();
-            this.Hide();
+            this.Close();
         }
 
         /// <summary>
@@ -146,15 +191,7 @@ namespace LogisticCentr
             textBoxBrand.Clear();
             textBoxtonnage.Clear();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                adapter.SelectCommand = new SqlCommand(sqlMain, connection);
-
-                ds.Clear();
-                adapter.Fill(ds);
-            }
+            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
         }
 
         /// <summary>

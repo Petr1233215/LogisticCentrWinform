@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +33,23 @@ namespace LogisticCentr.Helpers
         public static string GetStringEqualOrLikeForINT(string columnName, string val)
         {
             return string.IsNullOrEmpty(val) ? $"{GetStringLikePattern(columnName, val)}" : $"{columnName} = {val}";  
+        }
+
+        /// <summary>
+        /// Обновляет видимы данные в датаГРиде
+        /// </summary>
+        public static void UpdateSelectViewData(SqlDataAdapter adapter, DataSet ds, string sqlQuery)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                adapter.SelectCommand = new SqlCommand(sqlQuery, connection);
+
+                ds.Clear();
+                adapter.Fill(ds);
+            }
         }
     }
 }
