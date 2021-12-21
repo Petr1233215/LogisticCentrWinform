@@ -393,7 +393,7 @@ namespace LogisticCentr
         private void button6_Click(object sender, EventArgs e)
         {
             var s = GetFilterFromTextBox();
-            string sql = $"{sqlMainQueryView} WHERE {GetFilterFromTextBox()}";
+            string sql = $"{sqlMainQueryView} WHERE {GetFilterFromTextBox()} {GetSearchFilterTextBox()}";
             SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sql, con));
         }
 
@@ -420,9 +420,20 @@ namespace LogisticCentr
 
         private string GetSearchFilterTextBox()
         {
-            return $"{SqlHelper.GetStringLikePattern("brand", textBox1.Text)} or {SqlHelper.GetStringLikePattern("year_issue", textBox1.Text)} " +
-               $"or {SqlHelper.GetStringLikePattern("tonnage", textBox1.Text)} or {SqlHelper.GetStringLikePattern("state_number", textBox1.Text)} " +
-               $"or {SqlHelper.GetStringLikePattern("body_type", textBox1.Text)} or {SqlHelper.GetStringLikePattern("id_car", textBox1.Text)}";
+            var query = "";
+
+            if (string.IsNullOrEmpty(textBox3.Text))
+                return query;
+
+            query = $" and ({SqlHelper.GetStringLikePattern("brand", textBox3.Text)} or {SqlHelper.GetStringLikePattern("name_route", textBox3.Text)} " +
+                $"{SqlHelper.GetStringLikePattern("drivers.first_name + ' ' + drivers.second_name + ' ' + COALESCE(drivers.last_name, '')", textBox3.Text, "or", false)} " +
+                $"{SqlHelper.GetStringLikePattern("logistic.first_name + ' ' + logistic.second_name + ' ' + COALESCE(logistic.last_name, '')", textBox3.Text, "or", false)} " +
+                $"or {SqlHelper.GetStringLikePattern("name_client", textBox3.Text)} or {SqlHelper.GetStringLikePattern("point_shipment", textBox3.Text)} " +
+                $"or {SqlHelper.GetStringLikePattern("point_arrival", textBox3.Text)} or {SqlHelper.GetStringLikePattern("datetime_shipment", textBox3.Text)} " +
+                $"or {SqlHelper.GetStringLikePattern("datetime_arrival", textBox3.Text)}) ";
+
+
+            return query;
         }
     }
 }
