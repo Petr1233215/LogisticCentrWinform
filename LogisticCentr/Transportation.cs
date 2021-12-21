@@ -18,7 +18,9 @@ namespace LogisticCentr
         SqlDataAdapter adapter;
         SqlCommandBuilder commandBuilder;
         string connectionString = SqlHelper.GetCon();
-        string sqlMainQueryView = @"SELECT        transportation.id_transportation, transportation.id_route, routes.name_route, transportation.id_logist, logistic.first_name + ' ' + logistic.second_name + ' ' + COALESCE(logistic.last_name, '') as name_logistic, 
+
+        const string sqlMain = @"SELECT * FROM transportation";
+        const string sqlMainQueryView = @"SELECT        transportation.id_transportation, transportation.id_route, routes.name_route, transportation.id_logist, logistic.first_name + ' ' + logistic.second_name + ' ' + COALESCE(logistic.last_name, '') as name_logistic, 
         						transportation.id_client, clients.name_client, transportation.id_driver, drivers.first_name + ' ' + drivers.second_name + ' ' + COALESCE(drivers.last_name, '') AS name_driver, 
                                  transportation.id_car, cars_park.brand, transportation.point_shipment, transportation.point_arrival,
         						 transportation.datetime_shipment, transportation.datetime_arrival
@@ -29,7 +31,7 @@ namespace LogisticCentr
                                  logistic ON transportation.id_logist = logistic.id_logist INNER JOIN
                                  routes ON transportation.id_route = routes.id_route ";
 
-        string sqlMain = @"SELECT * FROM transportation";
+        
 
         public Transportation()
         {
@@ -49,9 +51,7 @@ namespace LogisticCentr
                 dataGridView1.DataSource = ds.Tables[0];
 
                 SetSettingsDataGrid();
-
                 SetComboBoxes(connection, ds.Tables[0].Rows.Count);
-
                 SetDateTimePicker();
             }
         }
@@ -251,6 +251,12 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
+            if(dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Выберите строку, которую хотите изменить");
+                return;
+            }
+
             if (CheckTextBoxesValueNull())
                 return;
 
@@ -354,6 +360,69 @@ namespace LogisticCentr
 
             dateTimePicker1.Value = DateTime.TryParse(row["datetime_shipment"].ToString(), out DateTime dt) ? dt : DateTime.Now;
             dateTimePicker2.Value = DateTime.TryParse(row["datetime_arrival"].ToString(), out DateTime dt2) ? dt2 : DateTime.Now;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+
+            dateTimePicker1.Value = DateTime.Now;
+            dateTimePicker2.Value = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Очистка полей для формы фильтров
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button8_Click(object sender, EventArgs e)
+        {
+            textBox3.Clear();
+            textBox4.Clear();
+            textBox5.Clear();
+            textBox6.Clear();
+            textBox7.Clear();
+            textBox8.Clear();
+            textBox9.Clear();
+            textBox10.Clear();
+            checkBox1.Checked = false;
+            checkBox2.Checked = false;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var s = GetFilterFromTextBox();
+            string sql = $"{sqlMainQueryView} WHERE {GetFilterFromTextBox()}";
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sql, con));
+        }
+
+        /// <summary>
+        /// Возвращает составной запрос на фильтры
+        /// </summary>
+        /// <returns></returns>
+        private string GetFilterFromTextBox()
+        {
+
+            var query =  $"{SqlHelper.GetStringLikePattern("brand", textBox4.Text)} and {SqlHelper.GetStringLikePattern("name_route", textBox5.Text)} " +
+                $"{SqlHelper.GetStringLikePattern("drivers.first_name + ' ' + drivers.second_name + ' ' + COALESCE(drivers.last_name, '')", textBox6.Text, "and", false)} " +
+                $"{SqlHelper.GetStringLikePattern("logistic.first_name + ' ' + logistic.second_name + ' ' + COALESCE(logistic.last_name, '')", textBox7.Text, "and", false)} " +
+                $"and {SqlHelper.GetStringLikePattern("name_client", textBox8.Text)} and {SqlHelper.GetStringLikePattern("point_shipment", textBox9.Text)} " +
+                $"and {SqlHelper.GetStringLikePattern("point_arrival", textBox10.Text)} ";
+
+            if (checkBox1.Checked == true)
+                query += $"{SqlHelper.GetDateBetweenPattern("datetime_shipment", dateTimePicker3.Value, dateTimePicker4.Value, "and")}";
+            if(checkBox2.Checked == true)
+                query += $"{SqlHelper.GetDateBetweenPattern("datetime_arrival", dateTimePicker5.Value, dateTimePicker6.Value, "and")}";
+
+            return query;
+        }
+
+        private string GetSearchFilterTextBox()
+        {
+            return $"{SqlHelper.GetStringLikePattern("brand", textBox1.Text)} or {SqlHelper.GetStringLikePattern("year_issue", textBox1.Text)} " +
+               $"or {SqlHelper.GetStringLikePattern("tonnage", textBox1.Text)} or {SqlHelper.GetStringLikePattern("state_number", textBox1.Text)} " +
+               $"or {SqlHelper.GetStringLikePattern("body_type", textBox1.Text)} or {SqlHelper.GetStringLikePattern("id_car", textBox1.Text)}";
         }
     }
 }

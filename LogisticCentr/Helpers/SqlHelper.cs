@@ -11,16 +11,36 @@ namespace LogisticCentr.Helpers
 {
     public static class SqlHelper
     {
-     
         /// <summary>
         /// Оборачивает строку в sql like pattern
         /// </summary>
+        /// <param name="columnName"></param>
+        /// <param name="str"></param>
+        /// <param name="isSearchNullable">Флаг отвечает, за то учитывать null при поиске или нет(тру учитывать, фалс нет)</param>
         /// <returns></returns>
-        public static string GetStringLikePattern(string columnName, string str)
+        public static string GetStringLikePattern(string columnName, string str, string orAnd = "", bool isSearchNullable = true)
         {
+            if (!isSearchNullable && string.IsNullOrEmpty(str))
+                return "";
+
             return string.IsNullOrEmpty(str)
-                ? $"({columnName} like '%%' or {columnName} is NULL )" 
-                : $"{columnName} like '%{str}%'";
+                ? $"{orAnd} ({columnName} like '%%' or {columnName} is NULL )" 
+                : $"{orAnd} {columnName} like '%{str}%'";
+        }
+
+        /// <summary>
+        /// Преобразование даты с По в запрос битвин
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <param name="dateFrom"></param>
+        /// <param name="dateTo"></param>
+        /// <param name="orAnd"></param>
+        /// <param name="formatDate"></param>
+        /// <returns></returns>
+        public static string GetDateBetweenPattern(string columnName, DateTime dateFrom, DateTime dateTo, string orAnd = "", string formatDate = "yyyy/MM/dd hh:mm:ss")
+        {
+            return $" {orAnd} {columnName} between '{dateFrom.ToString(formatDate)}' and '{dateTo.ToString(formatDate)}' ";
+
         }
 
         /// <summary>
