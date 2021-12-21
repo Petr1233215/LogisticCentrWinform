@@ -50,13 +50,9 @@ namespace LogisticCentr
 
                 SetSettingsDataGrid();
 
+                SetComboBoxes(connection, ds.Tables[0].Rows.Count);
 
-                SqlDataAdapter ad2 = new SqlDataAdapter("SELECT * FROM cars_park", connection);
-                DataSet ds2 = new DataSet();
-                ad2.Fill(ds2);
-                comboBox1.DataSource = ds2;
-                comboBox1.DisplayMember = "brand";
-                //comboBox1.ValueMember = "id_transportation";
+                SetDateTimePicker();
             }
         }
 
@@ -91,6 +87,47 @@ namespace LogisticCentr
         }
 
         /// <summary>
+        /// Заполняем КомбоБоксы значениями
+        /// </summary>
+        /// <param name="connection"></param>
+        private void SetComboBoxes(SqlConnection connection, int rowsCount)
+        {
+            if (rowsCount <= 0)
+                return;
+
+            ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "brand", comboBoxCarParkView }, { "id_car", comboBoxCarParkHideId } },
+                                        "SELECT * FROM cars_park", connection);
+
+            ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "name_logistic", comboBoxLogistView }, { "id_logist", comboBoxLogistId } },
+                "SELECT id_logist, first_name + ' ' + second_name + ' ' + COALESCE(last_name, '') AS name_logistic FROM logistic", connection);
+
+            ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "name_client", comboBoxClientView }, { "id_client", comboBoxClientId } },
+                "SELECT * FROM clients", connection);
+
+            ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "name_route", comboBoxRouteView }, { "id_route", comboBoxRouteId } },
+                "SELECT * FROM routes", connection);
+
+            ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "driver_name", comboBoxDriverView }, { "id_driver", comboBoxDriverId } },
+                "SELECT id_driver, first_name + ' ' + second_name + ' ' + COALESCE(last_name, '') AS driver_name FROM drivers", connection);
+
+            //Выбираем первое зн-ие в списках, чтобы долго не прокликивать
+            comboBoxCarParkView.SelectedIndex = 0;
+            comboBoxLogistView.SelectedIndex = 0;
+            comboBoxClientView.SelectedIndex = 0;
+            comboBoxRouteView.SelectedIndex = 0;
+            comboBoxDriverView.SelectedIndex = 0;
+        }
+
+        private void SetDateTimePicker()
+        {
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.CustomFormat = "MM/dd/yyyy hh:mm:ss";
+            dateTimePicker2.Format = DateTimePickerFormat.Custom;
+            dateTimePicker2.CustomFormat = "MM/dd/yyyy hh:mm:ss";
+        }
+
+
+        /// <summary>
         /// Обработчик обновления данных в DATASET'e используется для отлова ошибок
         /// </summary>
         /// <param name="sender"></param>
@@ -99,7 +136,7 @@ namespace LogisticCentr
         {
             if (e.Errors != null)
             {
-                string err = ValidateHelper.CheckValuesItemArrayForNull(e.Row, dataGridView1.Columns, new string[] { });
+                string err = ValidateHelper.CheckValuesItemArrayForNull(e.Row, dataGridView1.Columns, null);
 
                 if (string.IsNullOrEmpty(err))
                     err = e.Errors.Message;
@@ -150,43 +187,33 @@ namespace LogisticCentr
             }
         }
 
+        /// <summary>
+        /// Вернет Тру, если есть пустые текст боксы
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckTextBoxesValueNull()
+        {
+            var err = ValidateHelper.CheckStringNotNullOrEmpty(new Dictionary<string, string> {
+                {label6.Text, textBox1.Text },
+                {label7.Text, textBox2.Text },
+            });
+
+            if(!string.IsNullOrEmpty(err))
+            {
+                MessageBox.Show(err);
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// кнопка добавления
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            DataRow row = ds.Tables[0].NewRow();
-            ds.Tables[0].Rows.Add(row);
-        }
+            if (CheckTextBoxesValueNull())
+                return;
 
-        /// <summary>
-        /// обработчик нажатия клавиж при вводе в ячейках таблицы
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EditingControl_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            var nameColumn = this.dataGridView1.CurrentCell.OwningColumn.Name;
-            if (nameColumn == "distance")
-            {
-                ValidateHelper.HandleCheckDigit(e);
-            }
-            else if (nameColumn == "price")
-            {
-                Control editingControl = (Control)sender;
-                ValidateHelper.HandleTypeMoney(e, editingControl.Text);
-            }
-        }
-
-        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            dataGridView1.EditingControl.KeyPress -= EditingControl_KeyPress;
-            dataGridView1.EditingControl.KeyPress += EditingControl_KeyPress;
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
             DataRow row = ds.Tables[0].NewRow();
             ds.Tables[0].Rows.Add(row);
 
@@ -194,27 +221,39 @@ namespace LogisticCentr
             {
                 adapter.InsertCommand = new SqlCommand("sp_CreateTransportation", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_route", 1));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_logist", 1));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_client", 1));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_driver", 3));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_car", 2));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@point_shipment", "dsf"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@point_arrival", "sdf"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@datetime_shipment", DateTime.Now));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@datetime_arrival", DateTime.Now));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_route", comboBoxRouteId.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_logist", comboBoxLogistId.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_client", comboBoxClientId.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_driver", comboBoxDriverId.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@id_car", comboBoxCarParkHideId.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@point_shipment", textBox1.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@point_arrival", textBox2.Text));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@datetime_shipment", dateTimePicker1.Value));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@datetime_arrival", dateTimePicker2.Value));
 
                 SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@id_transportation", SqlDbType.Int, 0, "id_transportation");
                 parameter.Direction = ParameterDirection.Output;
 
                 adapter.Update(ds);
-
                 SqlHelper.UpdateSelectViewData(adapter, ds, sqlMainQueryView, connection);
+
+                //После добавления очищакем выбранные строки, скролим вниз и выбираем последнюю добавленную
+                dataGridView1.ClearSelection();
+                dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.RowCount - 1;
+                dataGridView1.Rows[dataGridView1.RowCount - 1].Selected = true;
             }
         }
 
+        /// <summary>
+        /// Изменить данные
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
+            if (CheckTextBoxesValueNull())
+                return;
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -223,16 +262,25 @@ namespace LogisticCentr
                 commandBuilder = new SqlCommandBuilder(adapter);
 
                 var row = ds.Tables[0].Rows[dataGridView1.CurrentRow.Index];
-                row["point_shipment"] = Guid.NewGuid().ToString();
+
+                row["id_car"] = comboBoxCarParkHideId.Text;
+                row["id_route"] = comboBoxRouteId.Text;
+                row["id_client"] = comboBoxClientId.Text;
+                row["id_driver"] = comboBoxDriverId.Text;
+                row["id_logist"] = comboBoxLogistId.Text;
+                row["point_shipment"] = textBox1.Text;
+                row["point_arrival"] = textBox2.Text;
+                row["datetime_shipment"] = dateTimePicker1.Value;
+                row["datetime_arrival"] = dateTimePicker2.Value;
 
                 try
                 {
                     adapter.Update(ds);
-                    //SqlHelper.UpdateSelectViewData(adapter, ds, sqlMainQueryView, connection);
+                    SqlHelper.UpdateSelectViewData(adapter, ds, sqlMainQueryView, connection);
                 }
                 catch (Exception ex)
-                {//Сделать логирование 
-                    MessageBox.Show("123");
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -255,6 +303,57 @@ namespace LogisticCentr
                 }
                 catch (Exception ex) { }
             }
+        }
+
+        private void comboBoxCarParkView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxCarParkHideId.SelectedIndex = ((ComboBox)sender).SelectedIndex;
+        }
+
+        private void comboBoxDriverView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxDriverId.SelectedIndex = ((ComboBox)sender).SelectedIndex;
+        }
+
+        private void comboBoxClientView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxClientId.SelectedIndex = ((ComboBox)sender).SelectedIndex;
+        }
+
+        private void comboBoxLogistView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxLogistId.SelectedIndex = ((ComboBox)sender).SelectedIndex;
+        }
+
+        private void comboBoxRouteView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxRouteId.SelectedIndex = ((ComboBox)sender).SelectedIndex;
+        }
+
+        /// <summary>
+        /// Событие обработки фокуса на строке
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            var row = ds.Tables[0].Rows[e.RowIndex];
+
+            comboBoxCarParkView.SelectedIndex = comboBoxCarParkHideId.SelectedIndex = comboBoxCarParkHideId.FindStringExact(row["id_car"].ToString());
+
+            comboBoxRouteView.SelectedIndex = comboBoxRouteId.SelectedIndex = comboBoxRouteId.FindStringExact(row["id_route"].ToString());
+
+            comboBoxClientView.SelectedIndex = comboBoxClientId.SelectedIndex = comboBoxClientId.FindStringExact(row["id_client"].ToString());
+
+            comboBoxDriverView.SelectedIndex = comboBoxDriverId.SelectedIndex = comboBoxDriverId.FindStringExact(row["id_driver"].ToString());
+
+            comboBoxLogistView.SelectedIndex = comboBoxLogistId.SelectedIndex = comboBoxLogistId.FindStringExact(row["id_logist"].ToString());
+
+            textBox1.Text = row["point_shipment"].ToString();
+            textBox2.Text = row["point_arrival"].ToString();
+
+            dateTimePicker1.Value = DateTime.TryParse(row["datetime_shipment"].ToString(), out DateTime dt) ? dt : DateTime.Now;
+            dateTimePicker2.Value = DateTime.TryParse(row["datetime_arrival"].ToString(), out DateTime dt2) ? dt2 : DateTime.Now;
         }
     }
 }

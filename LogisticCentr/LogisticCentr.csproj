@@ -74,6 +74,7 @@
     <Compile Include="Driver.Designer.cs">
       <DependentUpon>Driver.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ControlHelper.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Logistic.cs">

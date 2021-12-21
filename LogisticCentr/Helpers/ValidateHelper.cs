@@ -86,5 +86,26 @@ namespace LogisticCentr.Helpers
 
             return err;
         }
+
+        /// <summary>
+        /// Проверяет значение на null or empty
+        /// </summary>
+        /// <param name="nameValueField"> ключоч является имя поля, а значение, - это зн-ие поля</param>
+        /// <returns></returns>
+        public static string CheckStringNotNullOrEmpty(Dictionary<string, string> nameValueField)
+        {
+            string err = "";
+
+            if (nameValueField != null)
+            {
+                foreach (var nv in nameValueField)
+                {
+                    if (string.IsNullOrEmpty(nv.Value))
+                        err += $"Значение в поле: {nv.Key} не может быть пустым.\n";
+                }
+            }
+
+            return err;
+        }
     }
 }
