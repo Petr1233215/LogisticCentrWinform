@@ -139,7 +139,7 @@ namespace LogisticCentr
         /// </summary>
         private void button4_Click(object sender, EventArgs e)
         {
-            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain, con));
         }
 
         private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)

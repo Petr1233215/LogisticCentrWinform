@@ -75,10 +75,13 @@ namespace LogisticCentr.Helpers
         {
             string err = "";
 
-            foreach (var name in arrayNameColumnNotCanNull)
+            if(arrayNameColumnNotCanNull != null)
             {
-                if (row[name] == DBNull.Value)
-                    err += $"Значение в столбце: {columnCollection[name].HeaderText} не может быть пустым.\n";
+                foreach (var name in arrayNameColumnNotCanNull)
+                {
+                    if (row[name] == DBNull.Value)
+                        err += $"Значение в столбце: {columnCollection[name].HeaderText} не может быть пустым.\n";
+                }
             }
 
             return err;

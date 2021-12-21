@@ -135,7 +135,7 @@ namespace LogisticCentr
 
         private void button4_Click(object sender, EventArgs e)
         {
-            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain, con));
         }
     }
 }

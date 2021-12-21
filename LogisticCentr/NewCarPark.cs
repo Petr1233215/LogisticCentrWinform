@@ -152,7 +152,8 @@ namespace LogisticCentr
             //ToDo сделать валидацию полей фильтров
 
             string sql = $"SELECT * FROM cars_park Where {GetFilterFromTextBox()} and ({GetSearchFilterTextBox()})";
-            SqlHelper.UpdateSelectViewData(adapter, ds, sql);
+
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sql, con));
         }
 
 
@@ -184,7 +185,7 @@ namespace LogisticCentr
             textBoxBrand.Clear();
             textBoxtonnage.Clear();
 
-            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain, con));
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace LogisticCentr
 
         private void button7_Click(object sender, EventArgs e)
         {
-            SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain);
+            SqlHelper.ActionWorkWithSqlConnection((con) => SqlHelper.UpdateSelectViewData(adapter, ds, sqlMain, con));
         }
     }
 }

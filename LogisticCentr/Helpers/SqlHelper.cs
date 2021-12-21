@@ -38,17 +38,25 @@ namespace LogisticCentr.Helpers
         /// <summary>
         /// Обновляет видимы данные в датаГРиде
         /// </summary>
-        public static void UpdateSelectViewData(SqlDataAdapter adapter, DataSet ds, string sqlQuery)
+        public static void UpdateSelectViewData(SqlDataAdapter adapter, DataSet ds, string sqlQuery, SqlConnection connection)
+        {
+            adapter.SelectCommand = new SqlCommand(sqlQuery, connection);
+
+            ds.Clear();
+            adapter.Fill(ds);
+        }
+
+        /// <summary>
+        /// позволяет передать Action и выполнить его в SqlConnection
+        /// </summary>
+        public static void ActionWorkWithSqlConnection(Action<SqlConnection> callback)
         {
             var connectionString = GetCon();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                adapter.SelectCommand = new SqlCommand(sqlQuery, connection);
-
-                ds.Clear();
-                adapter.Fill(ds);
+                callback(connection);
             }
         }
 
