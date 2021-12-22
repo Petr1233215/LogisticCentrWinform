@@ -92,8 +92,6 @@ namespace LogisticCentr
         /// <param name="connection"></param>
         private void SetComboBoxes(SqlConnection connection, int rowsCount)
         {
-            if (rowsCount <= 0)
-                return;
 
             ControlHelper.FillCombobox(new Dictionary<string, ComboBox>() { { "brand", comboBoxCarParkView }, { "id_car", comboBoxCarParkHideId } },
                                         "SELECT * FROM cars_park", connection);
@@ -111,6 +109,7 @@ namespace LogisticCentr
                 "SELECT id_driver, first_name + ' ' + second_name + ' ' + COALESCE(last_name, '') AS driver_name FROM drivers", connection);
 
             //Выбираем первое зн-ие в списках, чтобы долго не прокликивать
+
             comboBoxCarParkView.SelectedIndex = 0;
             comboBoxLogistView.SelectedIndex = 0;
             comboBoxClientView.SelectedIndex = 0;
@@ -175,7 +174,10 @@ namespace LogisticCentr
         private void button3_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)
+            {
                 MessageBox.Show("Выберите элементы для удаления");
+                return;
+            }
 
             var res = MessageBox.Show("Вы действительно хотите удалить выбранные элементы?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res == DialogResult.Yes)
@@ -234,8 +236,15 @@ namespace LogisticCentr
                 SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@id_transportation", SqlDbType.Int, 0, "id_transportation");
                 parameter.Direction = ParameterDirection.Output;
 
-                adapter.Update(ds);
-                SqlHelper.UpdateSelectViewData(adapter, ds, sqlMainQueryView, connection);
+                try
+                {
+                    adapter.Update(ds);
+                    SqlHelper.UpdateSelectViewData(adapter, ds, sqlMainQueryView, connection);
+                }
+                catch (Exception ex)
+                {
+                }
+                
 
                 //После добавления очищакем выбранные строки, скролим вниз и выбираем последнюю добавленную
                 dataGridView1.ClearSelection();
@@ -257,6 +266,12 @@ namespace LogisticCentr
                 return;
             }
 
+            if(dataGridView1.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("для изменения выберите только 1 строку");
+                return;
+            }
+
             if (CheckTextBoxesValueNull())
                 return;
 
@@ -267,7 +282,7 @@ namespace LogisticCentr
                 adapter.SelectCommand = new SqlCommand(sqlMain, connection);
                 commandBuilder = new SqlCommandBuilder(adapter);
 
-                var row = ds.Tables[0].Rows[dataGridView1.CurrentRow.Index];
+                var row = ds.Tables[0].Rows[dataGridView1.SelectedRows[0].Index];
 
                 row["id_car"] = comboBoxCarParkHideId.Text;
                 row["id_route"] = comboBoxRouteId.Text;
@@ -343,23 +358,7 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            var row = ds.Tables[0].Rows[e.RowIndex];
-
-            comboBoxCarParkView.SelectedIndex = comboBoxCarParkHideId.SelectedIndex = comboBoxCarParkHideId.FindStringExact(row["id_car"].ToString());
-
-            comboBoxRouteView.SelectedIndex = comboBoxRouteId.SelectedIndex = comboBoxRouteId.FindStringExact(row["id_route"].ToString());
-
-            comboBoxClientView.SelectedIndex = comboBoxClientId.SelectedIndex = comboBoxClientId.FindStringExact(row["id_client"].ToString());
-
-            comboBoxDriverView.SelectedIndex = comboBoxDriverId.SelectedIndex = comboBoxDriverId.FindStringExact(row["id_driver"].ToString());
-
-            comboBoxLogistView.SelectedIndex = comboBoxLogistId.SelectedIndex = comboBoxLogistId.FindStringExact(row["id_logist"].ToString());
-
-            textBox1.Text = row["point_shipment"].ToString();
-            textBox2.Text = row["point_arrival"].ToString();
-
-            dateTimePicker1.Value = DateTime.TryParse(row["datetime_shipment"].ToString(), out DateTime dt) ? dt : DateTime.Now;
-            dateTimePicker2.Value = DateTime.TryParse(row["datetime_arrival"].ToString(), out DateTime dt2) ? dt2 : DateTime.Now;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -434,6 +433,37 @@ namespace LogisticCentr
 
 
             return query;
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            var row = ds.Tables[0].Rows[e.RowIndex];
+
+            int id_car = comboBoxCarParkHideId.FindStringExact(row["id_car"].ToString());
+            int id_route = comboBoxRouteId.FindStringExact(row["id_route"].ToString());
+            int id_client = comboBoxClientId.FindStringExact(row["id_client"].ToString());
+            int id_driver = comboBoxDriverId.FindStringExact(row["id_driver"].ToString());
+            int id_logist = comboBoxLogistId.FindStringExact(row["id_logist"].ToString());
+            
+
+            comboBoxCarParkView.SelectedIndex = comboBoxCarParkHideId.SelectedIndex = id_car >= 0 ? id_car : 0;
+
+            comboBoxRouteView.SelectedIndex = comboBoxRouteId.SelectedIndex = id_route >= 0 ? id_route : 0;
+
+            comboBoxClientView.SelectedIndex = comboBoxClientId.SelectedIndex = id_client >= 0 ? id_client : 0;
+
+            comboBoxDriverView.SelectedIndex = comboBoxDriverId.SelectedIndex = id_driver >= 0 ? id_driver : 0;
+
+            comboBoxLogistView.SelectedIndex = comboBoxLogistId.SelectedIndex = id_logist >= 0 ? id_logist : 0;
+
+            textBox1.Text = row["point_shipment"].ToString();
+            textBox2.Text = row["point_arrival"].ToString();
+
+            dateTimePicker1.Value = DateTime.TryParse(row["datetime_shipment"].ToString(), out DateTime dt) ? dt : DateTime.Now;
+            dateTimePicker2.Value = DateTime.TryParse(row["datetime_arrival"].ToString(), out DateTime dt2) ? dt2 : DateTime.Now;
         }
     }
 }

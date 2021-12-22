@@ -25,7 +25,7 @@ namespace LogisticCentr.Helpers
 
             return string.IsNullOrEmpty(str)
                 ? $"{orAnd} ({columnName} like '%%' or {columnName} is NULL )" 
-                : $"{orAnd} {columnName} like '%{str}%'";
+                : $"{orAnd} {columnName} like N'%{str}%'";
         }
 
         /// <summary>

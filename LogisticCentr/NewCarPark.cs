@@ -87,7 +87,6 @@ namespace LogisticCentr
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                //adapter = new SqlDataAdapter(sqlMain, connection);
                 adapter.SelectCommand = new SqlCommand(sqlMain, connection);
                 commandBuilder = new SqlCommandBuilder(adapter);
                 adapter.InsertCommand = new SqlCommand("sp_CreateCarPark", connection);
@@ -149,7 +148,6 @@ namespace LogisticCentr
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            //ToDo сделать валидацию полей фильтров
 
             string sql = $"SELECT * FROM cars_park Where {GetFilterFromTextBox()} and ({GetSearchFilterTextBox()})";
 
