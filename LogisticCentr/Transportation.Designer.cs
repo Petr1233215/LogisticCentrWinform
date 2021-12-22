@@ -395,7 +395,7 @@ namespace LogisticCentr
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(809, 81);
+            this.tabControl1.Location = new System.Drawing.Point(783, 38);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(640, 563);
@@ -724,7 +724,8 @@ namespace LogisticCentr
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1667, 836);
+            this.ClientSize = new System.Drawing.Size(1490, 702);
+            this.ControlBox = false;
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.button4);
